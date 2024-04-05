@@ -2,9 +2,7 @@ import random
 
 
 def roll():
-    min_value = 1
-    max_value = 6
-    return random.randint(min_value, max_value)
+    return random.randint(1, 6)
 
 
 def print_player_turn(player_idx, player_scores):
@@ -24,13 +22,26 @@ def get_players_count():
             print("Invalid input, try again.")
 
 
+def handle_roll(current_score):
+    value = roll()
+    if value == 1:
+        print("You rolled a 1! Turn done!")
+        return 0
+    else:
+        current_score += value
+        print(f"You rolled a: {value}")
+        current_score *= 2 if current_score % 2 == 0 else 0.5
+        print(f"Your score is now: {current_score}")
+        return current_score
+
+
 def main():
     players = get_players_count()
     max_score = 50
-    player_scores = [0 for _ in range(players)]
+    player_scores = [0] * players
 
     while max(player_scores) < max_score:
-        for player_idx in range(players):
+        for player_idx, score in enumerate(player_scores):
             print_player_turn(player_idx, player_scores)
             current_score = 0
 
@@ -38,22 +49,7 @@ def main():
                 should_roll = input("Would you like to roll (y)? ")
                 if should_roll.lower() != "y":
                     break
-
-                value = roll()
-                if value == 1:
-                    print("You rolled a 1! Turn done!")
-                    current_score = 0
-                    break
-                else:
-                    current_score += value
-                    print(f"You rolled a: {value}")
-
-                if current_score % 2 == 0:
-                    print("Bonus! Your score is doubled.")
-                    current_score *= 2
-                else:
-                    print("Penalty! Your score is halved.")
-                    current_score /= 2
+                current_score = handle_roll(current_score)
 
             player_scores[player_idx] += int(current_score)
             print(f"Your total score is: {player_scores[player_idx]}")
