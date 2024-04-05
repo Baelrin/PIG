@@ -30,7 +30,7 @@ def handle_roll(current_score):
     else:
         current_score += value
         print(f"You rolled a: {value}")
-        current_score *= 2 if current_score % 2 == 0 else 0.5
+        current_score *= 2 if current_score % 2 == 0 else 1
         print(f"Your score is now: {current_score}")
         return current_score
 
